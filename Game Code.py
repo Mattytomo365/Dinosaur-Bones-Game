@@ -2,14 +2,54 @@ import pygame
 from pygame.locals import *
 import random
 
-#initialise pygame
+# Initialises pygame
 pygame.init()
+
+# Screen images
+main_menu = pygame.image.load('main_menu.png')
+instructions_screen = pygame.image.load('instructions_screen.png')
+settings_screen = pygame.image.load('settings_screen.png')
+game_screen = pygame.image.load('game_screen.png')
+completion_screen = pygame.image.load('completion_screen.png')
+
+# Button images
+play_button = pygame.image.load('play_button.png')
+settings_button = pygame.image.load('settings_button.png')
+instructions_button = pygame.image.load('instructions_button.png')
+home_button = pygame.image.load('home_button.png')
+back_button = pygame.image.load('back_button.png')
+
+# Other components of the interface
+character = pygame.image.load('character.png')
+skeleton = pygame.image.load('skeleton.png')
+grass = pygame.image.load('grass.jpg')
+controls = pygame.image.load('touch_controls.png')
+bone = pygame.image.load('bone.png')
+
+# Setting up screen dimensions
+Width, Height = 1180, 820
+screen = pygame.display.set_mode((Width, Height))
+pygame.display.set_caption("Maze Game")
+
+# Resizing button images
+button_width, button_height = 236, 113
+play_button = pygame.transform.scale(play_button, (button_width, button_height))
+instructions_button = pygame.transform.scale(instructions_button, (button_width, button_height))
+settings_button = pygame.transform.scale(settings_button, (button_width, button_height))
+back_button = pygame.transform.scale(back_button, (button_width - 20, button_height))
+
+# Defining button dimensions and spacings
+button_x = (Width - button_width) // 2
+button_spacing = 20  # The space between the buttons
+
+# Defining button positions
+play_button_position = play_button.get_rect(topleft=(button_x, 300))
+instructions_button_position = instructions_button.get_rect(topleft=(button_x, play_button_position.bottom + button_spacing))
+settings_button_position = settings_button.get_rect(topleft=(button_x, instructions_button_position.bottom + button_spacing))
+back_button_position = back_button.get_rect(bottomleft=(-35, Height - 20))
 
 Bone_count = 0
 Bone_font = pygame.font.Font(None, 25)
-
-DinoImage = pygame.image.load(('hi'))
-
 bone_colour = (0,255,0)
 
 pathcolour = (222,184,135)
@@ -19,16 +59,11 @@ black = (1,1,1)
 red = (255,0,0)
 gray = (100,100,100)
 
-Width, Height = 800, 800
-
-
 Cell_Size = 80 #best for the grid to fit the height
 
 Rows, Cols = 10, 10
 
 x_offset = (Width - (Cell_Size*Cols))//2
-
-
 
 MazeGrid = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -44,23 +79,15 @@ MazeGrid = [
 ]
 
 
-pygame.display.set_caption("Maze Game")
-screen = pygame.display.set_mode((Width, Height))
-
-bush = pygame.image.load('').convert_alpha()
-bush = pygame.transform.scale(bush, (Cell_Size, Cell_Size))
-
-#surface = pygame.display.set_mode((400, 300))
-
-
-font = pygame.font.Font(None, 100)#large text for menu
-small_font = pygame.font.Font(None, 50)
+grass.convert_alpha()
+bush = pygame.transform.scale(grass, (Cell_Size, Cell_Size))
 
 player_row, player_col = 1, 1
 
 player_size = Cell_Size // 2
 player_offset = (Cell_Size - player_size) //2 #centers the player in the cell
 
+small_font = pygame.font.Font(None, 50)
 
 #game state
 game_state = "menu"
@@ -72,27 +99,24 @@ def Random_position():
         if MazeGrid[row][col] == 0 and (row, col) != (player_row, player_col):
             return row,col
 
+
 collectible_row = 0
 collectible_col = 0
-
 collectible_row, collectible_col = Random_position()
 
 def draw_menu():
-    screen.fill(white)
+    screen.blit(main_menu, (0, 0))  # Sets background
+    screen.blit(play_button, play_button_position.topleft)
+    screen.blit(instructions_button, instructions_button_position.topleft)
+    screen.blit(settings_button, settings_button_position.topleft)
 
-    title= font.render("Maze Game", True, black)
-    Start_text = font.render("press ENTER to start", True, black)
+def draw_instructions():
+    screen.blit(instructions_screen, (0, 0))
+    screen.blit(back_button, back_button_position.topleft)
 
-    title_x = (Width - title.get_width())// 2
-    title_y = (Height // 3)
-
-    start_x = (Width - Start_text.get_width()) // 2
-    start_y = title_y + 200
-
-    #draw text
-
-    screen.blit(title, (title_x, title_y))
-    screen.blit(Start_text, (start_x, start_y))
+def draw_settings():
+    screen.blit(settings_screen, (0, 0))
+    screen.blit(back_button, back_button_position.topleft)
 
 def draw_maze():
     screen.fill(pathcolour)  # fills the background
@@ -127,20 +151,8 @@ knob_x = slider_x + slider_width // 2  # Start in the middle
 brightness = 1.0  # 1.0 = normal, <1.0 = darker
 
 
-#def adjust_brightness(image, brightness):
-#    img_copy = image.copy()
-#    img_copy.fill((brightness * 255, brightness *255, brightness *255), special_flags=pygame.BLEND_MULT)
-#    return img_copy
-#def draw_settings():
-#    screen.fill(pathcolour)
-#    pygame.draw.rect(screen, gray(slider_x, slider_y, slider_width, slider_height))
-#    pygame.draw.circle((screen, red(knob_x, slider_y + slider_height // 2), knob_radius))
-
-#    print("settings")
-     #create a page with sliders to adjust the brightness
-
-def draw_info():
-    screen.blit(DinoImage, (0, 0))#create an image of size 800x800 i think
+def draw_completion_screen():
+    screen.blit(skeleton, (0, 0))#create an image of size 800x800 i think
 
 def Move_player(dx, dy):
     global player_row, player_col, collectible_col, collectible_row, Bone_count
@@ -155,32 +167,51 @@ def Move_player(dx, dy):
             Bone_count +=1
             collectible_row, collectible_col = Random_position() # spawn a new item
 
-
 running = True
 while running:
-    screen.fill(pathcolour)
+    # screen.fill(pathcolour)
+    screen.fill((255, 255, 255)) # White background
 
-    #bright_image = adjust_brightness(DinoImage, brightness)
-    #screen.blit(bright_image, (100, 100))
-
+    if game_state == 'menu':
+        draw_menu()
+    elif game_state == 'game':
+        draw_maze()
+        pass
+    elif game_state == 'instructions':
+        draw_instructions()
+        pass
+    elif game_state == 'settings':
+        draw_settings()
+        pass
+    elif game_state == 'complete':
+        draw_completion_screen()
     if Bone_count == 10:
-        #print("end")
-        game_state = "info"
+        game_state = 'complete'
         Bone_count = 0
-        #print(game_state)
 
     # controls the event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                running = False
-            elif game_state == "menu" and event.key == K_RETURN:
-                game_state = "game"
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            if game_state == 'menu':
+                if play_button_position.collidepoint(mouse_pos):
+                    game_state = 'game'
+                elif instructions_button_position.collidepoint(mouse_pos):
+                    game_state = 'instructions'
+                elif settings_button_position.collidepoint(mouse_pos):
+                    game_state = 'settings'
+            elif game_state in ['instructions', 'settings']:
+                if back_button_position.collidepoint(mouse_pos):
+                    game_state = 'menu'
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE and game_state in ['instructions', 'settings', 'game']:
+                game_state = 'menu'
             elif event.key == K_LALT:
-                game_state= "settings"
-            elif event.key == K_RETURN and game_state == "info":
+                game_state = "settings"
+            elif event.key == K_RETURN and game_state == "complete":
                 game_state = "menu"
             elif game_state == "game":
                 if event.key == K_LEFT or event.key == K_a:
@@ -194,20 +225,7 @@ while running:
                 elif event.key == K_p:
                     Bone_count = 10
                 elif event.key == K_t:
-                    game_state == "info"
-                #elif event.key == K_b:
-                #    game_state == "settings"
-
-
-    if game_state == "menu":
-        draw_menu()
-    elif game_state == "game":
-        draw_maze()
-    elif game_state == "info":
-        draw_info()
-    #elif game_state == "settings":
-    #    draw_settings()
+                    game_state == "complete"
     pygame.display.flip()  # updates the display
-
 
 pygame.quit()
