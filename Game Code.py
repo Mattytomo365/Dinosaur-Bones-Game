@@ -5,7 +5,7 @@ import random
 # Initialises pygame
 pygame.init()
 
-# Screen images
+# Screen background images
 main_menu = pygame.image.load('main_menu.png')
 instructions_screen = pygame.image.load('instructions_screen.png')
 settings_screen = pygame.image.load('settings_screen.png')
@@ -25,6 +25,7 @@ skeleton = pygame.image.load('skeleton.png')
 grass = pygame.image.load('grass.jpg')
 controls = pygame.image.load('touch_controls.png')
 bone = pygame.image.load('bone.png')
+shine = pygame.image.load('shine.png')
 
 # Setting up screen dimensions
 Width, Height = 1180, 820
@@ -37,6 +38,9 @@ play_button = pygame.transform.scale(play_button, (button_width, button_height))
 instructions_button = pygame.transform.scale(instructions_button, (button_width, button_height))
 settings_button = pygame.transform.scale(settings_button, (button_width, button_height))
 back_button = pygame.transform.scale(back_button, (button_width - 20, button_height))
+home_button = pygame.transform.scale(home_button, (button_width - 60, button_height - 40))
+shine = pygame.transform.scale(shine, (1534, 780))
+
 
 # Defining button dimensions and spacings
 button_x = (Width - button_width) // 2
@@ -47,6 +51,7 @@ play_button_position = play_button.get_rect(topleft=(button_x, 300))
 instructions_button_position = instructions_button.get_rect(topleft=(button_x, play_button_position.bottom + button_spacing))
 settings_button_position = settings_button.get_rect(topleft=(button_x, instructions_button_position.bottom + button_spacing))
 back_button_position = back_button.get_rect(bottomleft=(-35, Height - 20))
+home_button_position = home_button.get_rect(topleft=(-35, Height - 85))
 
 Bone_count = 0
 Bone_font = pygame.font.Font(None, 25)
@@ -142,6 +147,34 @@ def draw_maze():
 
     #if 10 bones are collected the information page is shown
 
+shine_scale = 1.3  # Initial scale (1.0 = original size)
+scale_direction = 0.0065  # Speed of scaling (adjust for faster/slower effect)
+
+def draw_completion_screen():
+    screen.blit(completion_screen, (0, 0))
+    screen.blit(home_button, home_button_position.topleft)
+
+    global shine_scale, scale_direction
+    shine_scale += scale_direction  # Increase or decrease scale
+
+    # Reverse direction when hitting size limits
+    if shine_scale >= 1.56 or shine_scale <= 1.04:
+        scale_direction *= -1
+
+    # Scale the shine image
+    new_size = (int(800 * shine_scale), int(400 * shine_scale))
+    shine_resized = pygame.transform.scale(shine, new_size)
+
+    # Calculate position to keep it centered
+    shine_x = 190 - (new_size[0] - 800) // 2
+    shine_y = 80 - (new_size[1] - 800) // 2
+
+    # Draw the pulsating shine
+    screen.blit(shine_resized, (shine_x, shine_y))
+
+    # Draw the skeleton on top
+    screen.blit(skeleton, (200, 270))
+
 slider_x = 200
 slider_y = 500
 slider_width = 400
@@ -149,10 +182,6 @@ slider_height = 10
 knob_radius = 10
 knob_x = slider_x + slider_width // 2  # Start in the middle
 brightness = 1.0  # 1.0 = normal, <1.0 = darker
-
-
-def draw_completion_screen():
-    screen.blit(skeleton, (0, 0))#create an image of size 800x800 i think
 
 def Move_player(dx, dy):
     global player_row, player_col, collectible_col, collectible_row, Bone_count
@@ -197,13 +226,34 @@ while running:
             mouse_pos = pygame.mouse.get_pos()
             if game_state == 'menu':
                 if play_button_position.collidepoint(mouse_pos):
+                    overlay = pygame.Surface((button_width, button_height), pygame.SRCALPHA)
+                    overlay.fill((0, 153, 0, 51))  # Green overlay
+                    screen.blit(play_button, play_button_position.topleft)
+                    screen.blit(overlay, play_button_position.topleft)
+                    pygame.display.flip()
+                    pygame.time.delay(150)
                     game_state = 'game'
                 elif instructions_button_position.collidepoint(mouse_pos):
+                    overlay = pygame.Surface((button_width, button_height), pygame.SRCALPHA)
+                    overlay.fill((0, 153, 0, 51))  # Green overlay
+                    screen.blit(instructions_button, instructions_button_position.topleft)
+                    screen.blit(overlay, instructions_button_position.topleft)
+                    pygame.display.flip()
+                    pygame.time.delay(150)
                     game_state = 'instructions'
                 elif settings_button_position.collidepoint(mouse_pos):
+                    overlay = pygame.Surface((button_width, button_height), pygame.SRCALPHA)
+                    overlay.fill((0, 153, 0, 51))  # Green overlay
+                    screen.blit(settings_button, settings_button_position.topleft)
+                    screen.blit(overlay, settings_button_position.topleft)
+                    pygame.display.flip()
+                    pygame.time.delay(150)
                     game_state = 'settings'
             elif game_state in ['instructions', 'settings']:
                 if back_button_position.collidepoint(mouse_pos):
+                    game_state = 'menu'
+            elif game_state == 'complete':
+                if home_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
 
         elif event.type == pygame.KEYDOWN:
