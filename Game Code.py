@@ -26,6 +26,10 @@ grass = pygame.image.load('grass.jpg')
 controls = pygame.image.load('touch_controls.png')
 bone = pygame.image.load('bone.png')
 shine = pygame.image.load('shine.png')
+up_arrow = pygame.image.load('up_arrow.png')
+down_arrow = pygame.image.load('down_arrow.png')
+left_arrow = pygame.image.load('left_arrow.png')
+right_arrow = pygame.image.load('right_arrow.png')
 
 # Setting up screen dimensions
 Width, Height = 1180, 820
@@ -40,6 +44,10 @@ settings_button = pygame.transform.scale(settings_button, (button_width, button_
 back_button = pygame.transform.scale(back_button, (button_width - 20, button_height))
 home_button = pygame.transform.scale(home_button, (button_width - 60, button_height - 40))
 shine = pygame.transform.scale(shine, (1534, 780))
+up_arrow = pygame.transform.scale(up_arrow, (58, 82))
+down_arrow = pygame.transform.scale(down_arrow, (58, 82))
+left_arrow = pygame.transform.scale(left_arrow, (82, 58))
+right_arrow = pygame.transform.scale(right_arrow, (82, 58))
 
 
 # Defining button dimensions and spacings
@@ -52,23 +60,22 @@ instructions_button_position = instructions_button.get_rect(topleft=(button_x, p
 settings_button_position = settings_button.get_rect(topleft=(button_x, instructions_button_position.bottom + button_spacing))
 back_button_position = back_button.get_rect(bottomleft=(-35, Height - 20))
 home_button_position = home_button.get_rect(topleft=(-35, Height - 85))
+up_arrow_position = up_arrow.get_rect(bottomright=(1020, 500))
+down_arrow_position = down_arrow.get_rect(bottomright=(1020, 590))
+left_arrow_position = left_arrow.get_rect(bottomright=(957, 555))
+right_arrow_position = right_arrow.get_rect(bottomright=(1060, 555))
 
-Bone_count = 0
-Bone_font = pygame.font.Font(None, 25)
-bone_colour = (0,255,0)
-
-pathcolour = (222,184,135)
 
 white = (255, 255, 255)
 black = (1,1,1)
 red = (255,0,0)
 gray = (100,100,100)
 
-Cell_Size = 80 #best for the grid to fit the height
-
 Rows, Cols = 10, 10
+player_row, player_col = 1, 1
+Bone_count = 0
 
-x_offset = (Width - (Cell_Size*Cols))//2
+game_state = "menu"
 
 MazeGrid = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -82,20 +89,6 @@ MazeGrid = [
     [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
-
-
-grass.convert_alpha()
-bush = pygame.transform.scale(grass, (Cell_Size, Cell_Size))
-
-player_row, player_col = 1, 1
-
-player_size = Cell_Size // 2
-player_offset = (Cell_Size - player_size) //2 #centers the player in the cell
-
-small_font = pygame.font.Font(None, 50)
-
-#game state
-game_state = "menu"
 
 def Random_position():
     while True:
@@ -124,28 +117,53 @@ def draw_settings():
     screen.blit(back_button, back_button_position.topleft)
 
 def draw_maze():
-    screen.fill(pathcolour)  # fills the background
+    # Initialising maze
+    screen.blit(game_screen, (0, 0))
+    maze_x_offset = 15  # Shift maze to the right slightly
+    maze_y_offset = 250  # Shift maze down slightly
+    Cell_Size = 60
+    maze_width = Cols * Cell_Size
+    maze_height = Rows * Cell_Size
+    pygame.draw.rect(screen, (222,184,135), (305, maze_y_offset, maze_width, maze_height))
+
+    # Initialising grass
+    grass.convert_alpha()
+    bush = pygame.transform.scale(grass, (Cell_Size, Cell_Size))
+
+    # Initialising player
+    x_offset = (Width - (Cell_Size*Cols))//2
+    player_size = Cell_Size // 2
+    player_offset = (Cell_Size - player_size) // 2  # centers the player in the cell
 
     # draw the maze
     for row in range(Rows):
         for col in range(Cols):
-            x, y = x_offset + col * Cell_Size, row * Cell_Size
+            x, y = maze_x_offset + x_offset + col * Cell_Size, maze_y_offset + row * Cell_Size
             if MazeGrid[row][col] == 1:
                 screen.blit(bush, (x, y))
 
-    collectible_x = x_offset + collectible_col * Cell_Size + player_offset
-    collectible_y = collectible_row * Cell_Size +player_offset
-    pygame.draw.circle(screen, bone_colour, (collectible_x + player_size // 2, collectible_y+ player_size // 2), player_size //3)
+    # Draw collectible bone
+    collectible_x = maze_x_offset + x_offset + collectible_col * Cell_Size + player_offset
+    collectible_y = maze_y_offset + collectible_row * Cell_Size + player_offset
+    pygame.draw.circle(screen, (0, 255, 0), (collectible_x + player_size // 2, collectible_y+ player_size // 2), player_size //3)
 
-    #draw the player
-    player_x = x_offset + player_col * Cell_Size + player_offset
-    player_y = player_row * Cell_Size + player_offset
+    # Draw player
+    player_x = maze_x_offset + x_offset + player_col * Cell_Size + player_offset
+    player_y = maze_y_offset + player_row * Cell_Size + player_offset
     pygame.draw.rect(screen, red, (player_x, player_y, player_size, player_size))
 
-    Bone_text = small_font.render(f"bones: {Bone_count}", True, black)
-    screen.blit(Bone_text, (10,10))
+    # Draw bone counter
+    Bone_text = (pygame.font.Font(None, 50)).render(f"{Bone_count}", True, black)
+    screen.blit(Bone_text, (250, 250))
 
-    #if 10 bones are collected the information page is shown
+    # Back button
+    screen.blit(back_button, back_button_position.topleft)
+
+    # Draw touch controls
+    screen.blit(up_arrow, up_arrow_position.bottomright)
+    screen.blit(down_arrow, down_arrow_position.bottomright)
+    screen.blit(left_arrow, left_arrow_position.bottomright)
+    screen.blit(right_arrow, right_arrow_position.bottomright)
 
 shine_scale = 1.3  # Initial scale (1.0 = original size)
 scale_direction = 0.0065  # Speed of scaling (adjust for faster/slower effect)
@@ -249,7 +267,7 @@ while running:
                     pygame.display.flip()
                     pygame.time.delay(150)
                     game_state = 'settings'
-            elif game_state in ['instructions', 'settings']:
+            elif game_state in ['instructions', 'settings', 'game']:
                 if back_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
             elif game_state == 'complete':
