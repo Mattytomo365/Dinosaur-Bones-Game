@@ -60,17 +60,33 @@ instructions_button_position = instructions_button.get_rect(topleft=(button_x, p
 settings_button_position = settings_button.get_rect(topleft=(button_x, instructions_button_position.bottom + button_spacing))
 back_button_position = back_button.get_rect(bottomleft=(-35, Height - 20))
 home_button_position = home_button.get_rect(topleft=(-35, Height - 85))
-up_arrow_position = up_arrow.get_rect(bottomright=(1020, 500))
-down_arrow_position = down_arrow.get_rect(bottomright=(1020, 590))
-left_arrow_position = left_arrow.get_rect(bottomright=(957, 555))
-right_arrow_position = right_arrow.get_rect(bottomright=(1060, 555))
+up_arrow_position = up_arrow.get_rect(topleft=(1010, 480))
+down_arrow_position = up_arrow.get_rect(topleft=(1010, 580))
+left_arrow_position = up_arrow.get_rect(topleft=(950, 540))
+right_arrow_position = up_arrow.get_rect(topleft=(1050, 540))
 
+# Initialising sliders for settings screen
+slider_x_volume = 250
+slider_x_brightness = 250
+slider_y_volume = 440
+slider_y_brightness = 560
+slider_width = 600
+slider_height = 10
+knob_radius = 20
+knob_x_volume = slider_x_volume + slider_width // 2  # Initial positions of the knobs
+knob_x_brightness = slider_x_brightness + slider_width // 2
+volume = 0.5  # Default values
+brightness = 1.0
+is_dragging_volume = False
+is_dragging_brightness = False
 
+# Defining colours
 white = (255, 255, 255)
 black = (1,1,1)
 red = (255,0,0)
 gray = (100,100,100)
 
+# Initialing maze components
 Rows, Cols = 10, 10
 player_row, player_col = 1, 1
 Bone_count = 0
@@ -116,6 +132,14 @@ def draw_settings():
     screen.blit(settings_screen, (0, 0))
     screen.blit(back_button, back_button_position.topleft)
 
+    # Draw Volume Slider
+    pygame.draw.rect(screen, (85, 85, 43), (slider_x_volume, slider_y_volume, slider_width, slider_height))  # Slider bar
+    pygame.draw.circle(screen, (184, 184, 148), (knob_x_volume, slider_y_volume + slider_height // 2), knob_radius)  # Knob
+
+    # Draw Brightness Slider
+    pygame.draw.rect(screen, (85, 85, 43), (slider_x_brightness, slider_y_brightness, slider_width, slider_height))
+    pygame.draw.circle(screen, (184, 184, 148), (knob_x_brightness, slider_y_brightness + slider_height // 2), knob_radius)
+
 def draw_maze():
     # Initialising maze
     screen.blit(game_screen, (0, 0))
@@ -160,10 +184,10 @@ def draw_maze():
     screen.blit(back_button, back_button_position.topleft)
 
     # Draw touch controls
-    screen.blit(up_arrow, up_arrow_position.bottomright)
-    screen.blit(down_arrow, down_arrow_position.bottomright)
-    screen.blit(left_arrow, left_arrow_position.bottomright)
-    screen.blit(right_arrow, right_arrow_position.bottomright)
+    screen.blit(up_arrow, up_arrow_position.topleft)
+    screen.blit(down_arrow, down_arrow_position.topleft)
+    screen.blit(left_arrow, left_arrow_position.topleft)
+    screen.blit(right_arrow, right_arrow_position.topleft)
 
 shine_scale = 1.3  # Initial scale (1.0 = original size)
 scale_direction = 0.0065  # Speed of scaling (adjust for faster/slower effect)
@@ -193,13 +217,7 @@ def draw_completion_screen():
     # Draw the skeleton on top
     screen.blit(skeleton, (200, 270))
 
-slider_x = 200
-slider_y = 500
-slider_width = 400
-slider_height = 10
-knob_radius = 10
-knob_x = slider_x + slider_width // 2  # Start in the middle
-brightness = 1.0  # 1.0 = normal, <1.0 = darker
+
 
 def Move_player(dx, dy):
     global player_row, player_col, collectible_col, collectible_row, Bone_count
@@ -242,6 +260,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
+            print(f"Mouse clicked at: {mouse_pos}")  # Debugging print
             if game_state == 'menu':
                 if play_button_position.collidepoint(mouse_pos):
                     overlay = pygame.Surface((button_width, button_height), pygame.SRCALPHA)
@@ -267,12 +286,50 @@ while running:
                     pygame.display.flip()
                     pygame.time.delay(150)
                     game_state = 'settings'
-            elif game_state in ['instructions', 'settings', 'game']:
+            elif game_state == 'game':
+                if up_arrow_position.collidepoint(mouse_pos):
+                    Move_player(0, -1)
+                elif down_arrow_position.collidepoint(mouse_pos):
+                    Move_player(0, 1)
+                elif left_arrow_position.collidepoint(mouse_pos):
+                    Move_player(-1, 0)
+                elif right_arrow_position.collidepoint(mouse_pos):
+                    Move_player(1, 0)
+                elif back_button_position.collidepoint(mouse_pos):
+                    game_state = 'menu'
+            elif game_state in ['instructions']:
                 if back_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
             elif game_state == 'complete':
                 if home_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
+            elif game_state == 'settings':
+                # Check if user clicked volume knob
+                if (knob_x_volume - knob_radius <= mouse_x <= knob_x_volume + knob_radius and
+                        slider_y_volume - knob_radius <= mouse_y <= slider_y_volume + slider_height + knob_radius):
+                    is_dragging_volume = True
+                # Check if user clicked brightness knob
+                if (knob_x_brightness - knob_radius <= mouse_x <= knob_x_brightness + knob_radius and
+                        slider_y_brightness - knob_radius <= mouse_y <= slider_y_brightness + slider_height + knob_radius):
+                    is_dragging_brightness = True
+                elif back_button_position.collidepoint(mouse_pos):
+                    game_state = 'menu'
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if game_state == 'settings':
+                is_dragging_volume = False
+                is_dragging_brightness = False
+
+        elif event.type == pygame.MOUSEMOTION:
+            if game_state == 'settings':
+                mouse_x, mouse_y = event.pos
+                # Move volume slider
+                if is_dragging_volume:
+                    knob_x_volume = max(slider_x_volume, min(mouse_x, slider_x_volume + slider_width))
+                    volume = (knob_x_volume - slider_x_volume) / slider_width  # Normalize between 0 and 1
+                # Move brightness slider
+                if is_dragging_brightness:
+                    knob_x_brightness = max(slider_x_volume, min(mouse_x, slider_x_volume + slider_width))
+                    brightness = (knob_x_brightness - slider_x_brightness) / slider_width  # Normalize between 0 and 1
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE and game_state in ['instructions', 'settings', 'game']:
