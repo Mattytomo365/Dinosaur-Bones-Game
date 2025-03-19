@@ -11,6 +11,7 @@ instructions_screen = pygame.image.load('instructions_screen.png')
 settings_screen = pygame.image.load('settings_screen.png')
 game_screen = pygame.image.load('game_screen.png')
 completion_screen = pygame.image.load('completion_screen.png')
+information_screen = pygame.image.load('information_screen.png')
 
 # Button images
 play_button = pygame.image.load('play_button.png')
@@ -240,7 +241,7 @@ def draw_completion_screen():
     screen.blit(skeleton, (200, 270))
 
 def draw_information_screen():
-    screen.blit(completion_screen, (0, 0))
+    screen.blit(information_screen, (0, 0))
 
 
 
@@ -337,6 +338,14 @@ while running:
             elif game_state == 'complete':
                 if home_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
+                elif information_button_position.collidepoint(mouse_pos):
+                    overlay = pygame.Surface((button_width * 0.75, button_height * 0.75), pygame.SRCALPHA)
+                    overlay.fill((0, 153, 0, 51))  # Green overlay
+                    screen.blit(information_button, information_button_position.topleft)
+                    screen.blit(overlay, information_button_position.topleft)
+                    pygame.display.flip()
+                    pygame.time.delay(150)
+                    game_state = 'information'
             elif game_state == 'settings':
                 # Check if user clicked volume knob
                 if (knob_x_volume - knob_radius <= mouse_x <= knob_x_volume + knob_radius and
