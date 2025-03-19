@@ -87,13 +87,14 @@ red = (255,0,0)
 gray = (100,100,100)
 
 # Initialing maze components
-Rows, Cols = 10, 10
+Rows, Cols = 12, 12
 player_row, player_col = 1, 1
 Bone_count = 0
+Cell_Size = Width//Cols
 
 game_state = "menu"
 
-MazeGrid = [
+"""MazeGrid = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
@@ -105,18 +106,20 @@ MazeGrid = [
     [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
+"""
 
-def Random_position():
+def get_random_maze_position():
     while True:
-        row = random.randint(1, Rows -2)
-        col = random.randint(1, Cols -2)
-        if MazeGrid[row][col] == 0 and (row, col) != (player_row, player_col):
-            return row,col
+        row = random.randint(1, Rows - 2)
+        col = random.randint(1, Cols - 2)
+        if maze[row][col] == 0:  # Ensure it's a valid path
+            return row, col
+
+Directions = [(0, -2), (0, 2), (-2, 0), (2, 0)]
+
+maze = [[1 for _ in range(Cols)] for _ in range (Rows)]
 
 
-collectible_row = 0
-collectible_col = 0
-collectible_row, collectible_col = Random_position()
 
 def draw_menu():
     screen.blit(main_menu, (0, 0))  # Sets background
@@ -140,14 +143,16 @@ def draw_settings():
     pygame.draw.rect(screen, (85, 85, 43), (slider_x_brightness, slider_y_brightness, slider_width, slider_height))
     pygame.draw.circle(screen, (184, 184, 148), (knob_x_brightness, slider_y_brightness + slider_height // 2), knob_radius)
 
+
+
 def draw_maze():
     # Initialising maze
     screen.blit(game_screen, (0, 0))
-    maze_x_offset = 15  # Shift maze to the right slightly
-    maze_y_offset = 250  # Shift maze down slightly
-    Cell_Size = 60
-    maze_width = Cols * Cell_Size
-    maze_height = Rows * Cell_Size
+    maze_x_offset = 300  # Shift maze to the right slightly
+    maze_y_offset = 205  # Shift maze down slightly
+    Cell_Size = 55
+    maze_width = 600
+    maze_height = 600
     pygame.draw.rect(screen, (222,184,135), (305, maze_y_offset, maze_width, maze_height))
 
     # Initialising grass
@@ -160,21 +165,23 @@ def draw_maze():
     player_offset = (Cell_Size - player_size) // 2  # centers the player in the cell
 
     # draw the maze
-    for row in range(Rows):
-        for col in range(Cols):
-            x, y = maze_x_offset + x_offset + col * Cell_Size, maze_y_offset + row * Cell_Size
-            if MazeGrid[row][col] == 1:
+    for row in range(Rows - 1):
+        for col in range(Cols - 1):
+            x, y = maze_x_offset + col * Cell_Size, maze_y_offset + row * Cell_Size
+            if maze[row][col] == 1:
                 screen.blit(bush, (x, y))
 
-    # Draw collectible bone
-    collectible_x = maze_x_offset + x_offset + collectible_col * Cell_Size + player_offset
+
+    #Draw collectible bone
+    collectible_x = 50 + x_offset + collectible_col * Cell_Size + player_offset
     collectible_y = maze_y_offset + collectible_row * Cell_Size + player_offset
     pygame.draw.circle(screen, (0, 255, 0), (collectible_x + player_size // 2, collectible_y+ player_size // 2), player_size //3)
 
     # Draw player
-    player_x = maze_x_offset + x_offset + player_col * Cell_Size + player_offset
+    player_x = 50 + x_offset + player_col * Cell_Size + player_offset
     player_y = maze_y_offset + player_row * Cell_Size + player_offset
     pygame.draw.rect(screen, red, (player_x, player_y, player_size, player_size))
+
 
     # Draw bone counter
     Bone_text = (pygame.font.Font(None, 50)).render(f"{Bone_count}", True, black)
@@ -191,6 +198,25 @@ def draw_maze():
 
 shine_scale = 1.3  # Initial scale (1.0 = original size)
 scale_direction = 0.0065  # Speed of scaling (adjust for faster/slower effect)
+
+
+def Generate_The_Maze(x, y):
+    maze[y][x] = 0
+    random.shuffle(Directions)
+
+
+    for dx, dy in Directions:
+        print(f"Generating maze at {x}, {y}")
+        nx, ny = x+ dx, y + dy
+        if 0< ny < Rows-1 and 0 < nx < Cols-1 and maze[ny][nx] == 1:
+            maze[y + dy//2][x + dx//2] = 0
+            Generate_The_Maze(nx, ny)
+
+Generate_The_Maze(1, 1)
+
+collectible_row, collectible_col = get_random_maze_position()
+
+
 
 def draw_completion_screen():
     screen.blit(completion_screen, (0, 0))
@@ -225,12 +251,12 @@ def Move_player(dx, dy):
     new_col = player_col + dx
 
     #check movement is allowed, not into a wall
-    if 0 <= new_row < Rows and 0 <= new_col < Cols and MazeGrid[new_row][new_col] == 0:
+    if 0 <= new_row < Rows and 0 <= new_col < Cols and maze[new_row][new_col] == 0:
         player_row, player_col = new_row, new_col
 
         if player_row == collectible_row and player_col == collectible_col:
             Bone_count +=1
-            collectible_row, collectible_col = Random_position() # spawn a new item
+            collectible_row, collectible_col = get_random_maze_position() # spawn a new item
 
 running = True
 while running:
