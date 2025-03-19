@@ -19,6 +19,7 @@ instructions_button = pygame.image.load('instructions_button.png')
 home_button = pygame.image.load('home_button.png')
 back_button = pygame.image.load('back_button.png')
 colour_blind_button = pygame.image.load('colour_blind_button.png')
+information_button = pygame.image.load('information_button.png')
 
 # Other components of the interface
 character = pygame.image.load('character.png')
@@ -50,6 +51,7 @@ down_arrow = pygame.transform.scale(down_arrow, (58, 82))
 left_arrow = pygame.transform.scale(left_arrow, (82, 58))
 right_arrow = pygame.transform.scale(right_arrow, (82, 58))
 colour_blind_button = pygame.transform.scale(colour_blind_button, (button_width * 0.75, button_height * 0.75))
+information_button = pygame.transform.scale(information_button, (button_width * 0.75, button_height * 0.75))
 
 
 # Defining button dimensions and spacings
@@ -67,6 +69,7 @@ down_arrow_position = up_arrow.get_rect(topleft=(1010, 580))
 left_arrow_position = up_arrow.get_rect(topleft=(950, 540))
 right_arrow_position = up_arrow.get_rect(topleft=(1050, 540))
 colour_blind_button_position = colour_blind_button.get_rect(topleft=(50, 335))
+information_button_position = information_button.get_rect(topleft=(940, 320))
 
 # Initialising sliders for settings screen
 slider_x_volume = 250
@@ -213,6 +216,7 @@ collectible_row, collectible_col = get_random_maze_position()
 def draw_completion_screen():
     screen.blit(completion_screen, (0, 0))
     screen.blit(home_button, home_button_position.topleft)
+    screen.blit(information_button, information_button_position.topleft)
 
     global shine_scale, scale_direction
     shine_scale += scale_direction  # Increase or decrease scale
