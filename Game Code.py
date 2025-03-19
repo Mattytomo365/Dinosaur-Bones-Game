@@ -18,6 +18,7 @@ settings_button = pygame.image.load('settings_button.png')
 instructions_button = pygame.image.load('instructions_button.png')
 home_button = pygame.image.load('home_button.png')
 back_button = pygame.image.load('back_button.png')
+colour_blind_button = pygame.image.load('colour_blind_button.png')
 
 # Other components of the interface
 character = pygame.image.load('character.png')
@@ -48,6 +49,7 @@ up_arrow = pygame.transform.scale(up_arrow, (58, 82))
 down_arrow = pygame.transform.scale(down_arrow, (58, 82))
 left_arrow = pygame.transform.scale(left_arrow, (82, 58))
 right_arrow = pygame.transform.scale(right_arrow, (82, 58))
+colour_blind_button = pygame.transform.scale(colour_blind_button, (button_width * 0.75, button_height * 0.75))
 
 
 # Defining button dimensions and spacings
@@ -64,6 +66,7 @@ up_arrow_position = up_arrow.get_rect(topleft=(1010, 480))
 down_arrow_position = up_arrow.get_rect(topleft=(1010, 580))
 left_arrow_position = up_arrow.get_rect(topleft=(950, 540))
 right_arrow_position = up_arrow.get_rect(topleft=(1050, 540))
+colour_blind_button_position = colour_blind_button.get_rect(topleft=(50, 335))
 
 # Initialising sliders for settings screen
 slider_x_volume = 250
@@ -170,11 +173,14 @@ def draw_maze():
 
 
     # Draw bone counter
-    Bone_text = (pygame.font.Font(None, 50)).render(f"{Bone_count}", True, black)
+    Bone_text = (pygame.font.Font(None, 50)).render(f"{Bone_count}", True, (222,184,135))
     screen.blit(Bone_text, (250, 250))
 
     # Back button
     screen.blit(back_button, back_button_position.topleft)
+
+    # Colour blind button
+    screen.blit(colour_blind_button, colour_blind_button_position.topleft)
 
     # Draw touch controls
     screen.blit(up_arrow, up_arrow_position.topleft)
@@ -229,6 +235,9 @@ def draw_completion_screen():
     # Draw the skeleton on top
     screen.blit(skeleton, (200, 270))
 
+def draw_information_screen():
+    screen.blit(completion_screen, (0, 0))
+
 
 
 def Move_player(dx, dy):
@@ -262,6 +271,8 @@ while running:
         pass
     elif game_state == 'complete':
         draw_completion_screen()
+    elif game_state == 'information':
+        draw_information_screen()
     if Bone_count == 10:
         game_state = 'complete'
         Bone_count = 0
@@ -309,6 +320,13 @@ while running:
                     Move_player(1, 0)
                 elif back_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
+                elif colour_blind_button_position.collidepoint(mouse_pos):
+                    overlay = pygame.Surface((button_width * 0.75, button_height * 0.75), pygame.SRCALPHA)
+                    overlay.fill((0, 153, 0, 51))  # Green overlay
+                    screen.blit(colour_blind_button, colour_blind_button_position.topleft)
+                    screen.blit(overlay, colour_blind_button_position.topleft)
+                    pygame.display.flip()
+                    pygame.time.delay(150)
             elif game_state in ['instructions']:
                 if back_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
