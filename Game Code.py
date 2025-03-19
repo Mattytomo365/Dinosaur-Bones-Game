@@ -288,7 +288,6 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
-            print(f"Mouse clicked at: {mouse_pos}")  # Debugging print
             if game_state == 'menu':
                 if play_button_position.collidepoint(mouse_pos):
                     overlay = pygame.Surface((button_width, button_height), pygame.SRCALPHA)
