@@ -242,6 +242,7 @@ def draw_completion_screen():
 
 def draw_information_screen():
     screen.blit(information_screen, (0, 0))
+    screen.blit(home_button, home_button_position.topleft)
 
 
 
@@ -355,6 +356,9 @@ while running:
                         slider_y_brightness - knob_radius <= mouse_y <= slider_y_brightness + slider_height + knob_radius):
                     is_dragging_brightness = True
                 elif back_button_position.collidepoint(mouse_pos):
+                    game_state = 'menu'
+            elif game_state == 'information':
+                if home_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
         elif event.type == pygame.MOUSEBUTTONUP:
             if game_state == 'settings':
