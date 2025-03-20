@@ -33,6 +33,7 @@ up_arrow = pygame.image.load('up_arrow.png')
 down_arrow = pygame.image.load('down_arrow.png')
 left_arrow = pygame.image.load('left_arrow.png')
 right_arrow = pygame.image.load('right_arrow.png')
+conversion_arrow = pygame.image.load('conversion_arrow.png')
 
 # Setting up screen dimensions
 Width, Height = 1180, 820
@@ -53,13 +54,14 @@ left_arrow = pygame.transform.scale(left_arrow, (82, 58))
 right_arrow = pygame.transform.scale(right_arrow, (82, 58))
 colour_blind_button = pygame.transform.scale(colour_blind_button, (button_width * 0.75, button_height * 0.75))
 information_button = pygame.transform.scale(information_button, (button_width * 0.75, button_height * 0.75))
+conversion_arrow = pygame.transform.scale(conversion_arrow, (58, 82))
 
 
 # Defining button dimensions and spacings
 button_x = (Width - button_width) // 2
 button_spacing = 20  # The space between the buttons
 
-# Defining button positions
+# Defining component/button positions
 play_button_position = play_button.get_rect(topleft=(button_x, 300))
 instructions_button_position = instructions_button.get_rect(topleft=(button_x, play_button_position.bottom + button_spacing))
 settings_button_position = settings_button.get_rect(topleft=(button_x, instructions_button_position.bottom + button_spacing))
@@ -71,6 +73,7 @@ left_arrow_position = up_arrow.get_rect(topleft=(950, 540))
 right_arrow_position = up_arrow.get_rect(topleft=(1050, 540))
 colour_blind_button_position = colour_blind_button.get_rect(topleft=(50, 335))
 information_button_position = information_button.get_rect(topleft=(940, 320))
+conversion_arrow_position = conversion_arrow.get_rect(topleft=(830, 500))
 
 # Initialising sliders for settings screen
 slider_x_volume = 250
@@ -240,9 +243,11 @@ def draw_completion_screen():
     # Draw the skeleton on top
     screen.blit(skeleton, (200, 270))
 
+
 def draw_information_screen():
     screen.blit(information_screen, (0, 0))
     screen.blit(home_button, home_button_position.topleft)
+    screen.blit(conversion_arrow, conversion_arrow_position.topleft)
 
 
 
