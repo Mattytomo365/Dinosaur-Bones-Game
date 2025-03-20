@@ -243,13 +243,21 @@ def draw_completion_screen():
     # Draw the skeleton on top
     screen.blit(skeleton, (200, 270))
 
+arrow_y_offset = 0
+arrow_direction = 1
+arrow_speed = 0.5
 
 def draw_information_screen():
+    global arrow_y_offset, arrow_direction
     screen.blit(information_screen, (0, 0))
     screen.blit(home_button, home_button_position.topleft)
-    screen.blit(conversion_arrow, conversion_arrow_position.topleft)
 
+    arrow_y_offset += arrow_direction * arrow_speed
 
+    if arrow_y_offset >= 15 or arrow_y_offset <= 0:
+        arrow_direction *= -1
+
+    screen.blit(conversion_arrow, (conversion_arrow_position.x, conversion_arrow_position.y + arrow_y_offset))
 
 def Move_player(dx, dy):
     global player_row, player_col, collectible_col, collectible_row, Bone_count
