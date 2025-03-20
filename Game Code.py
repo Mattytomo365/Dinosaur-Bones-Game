@@ -85,6 +85,7 @@ colour_blind_button = pygame.transform.scale(colour_blind_button, (button_width 
 information_button = pygame.transform.scale(information_button, (button_width * 0.75, button_height * 0.75))
 conversion_arrow = pygame.transform.scale(conversion_arrow, (58, 82))
 bone = pygame.transform.scale(bone, (Cell_Size // 2, Cell_Size // 2))
+character = pygame.transform.scale(character, (Cell_Size // 2, Cell_Size // 1.4))
 
 
 
@@ -178,7 +179,7 @@ def draw_maze():
     # Draw player
     player_x = 50 + x_offset + player_col * Cell_Size + player_offset
     player_y = maze_y_offset + player_row * Cell_Size + player_offset
-    pygame.draw.rect(screen, red, (player_x, player_y, player_size, player_size))
+    screen.blit(character, (player_x - 20, player_y - 25))
 
 
     # Draw bone counter
