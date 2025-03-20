@@ -248,7 +248,7 @@ def draw_completion_screen():
 
 arrow_y_offset = 0
 arrow_direction = 1
-arrow_speed = 0.5
+arrow_speed = 0.25
 
 def draw_information_screen():
     global arrow_y_offset, arrow_direction
