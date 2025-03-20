@@ -5,6 +5,40 @@ import random
 # Initialises pygame
 pygame.init()
 
+# Setting up screen dimensions
+Width, Height = 1180, 820
+screen = pygame.display.set_mode((Width, Height))
+pygame.display.set_caption("Maze Game")
+
+# Initialising sliders for settings screen
+slider_x_volume = 250
+slider_x_brightness = 250
+slider_y_volume = 440
+slider_y_brightness = 560
+slider_width = 600
+slider_height = 10
+knob_radius = 20
+knob_x_volume = slider_x_volume + slider_width // 2  # Initial positions of the knobs
+knob_x_brightness = slider_x_brightness + slider_width // 2
+volume = 0.5  # Default values
+brightness = 1.0
+is_dragging_volume = False
+is_dragging_brightness = False
+
+# Defining colours
+white = (255, 255, 255)
+black = (1,1,1)
+red = (255,0,0)
+gray = (100,100,100)
+
+# Initialing maze components
+Rows, Cols = 12, 12
+player_row, player_col = 1, 1
+Bone_count = 0
+Cell_Size = Width//Cols
+
+game_state = "menu"
+
 # Screen background images
 main_menu = pygame.image.load('main_menu.png')
 instructions_screen = pygame.image.load('instructions_screen.png')
@@ -35,11 +69,6 @@ left_arrow = pygame.image.load('left_arrow.png')
 right_arrow = pygame.image.load('right_arrow.png')
 conversion_arrow = pygame.image.load('conversion_arrow.png')
 
-# Setting up screen dimensions
-Width, Height = 1180, 820
-screen = pygame.display.set_mode((Width, Height))
-pygame.display.set_caption("Maze Game")
-
 # Resizing button images
 button_width, button_height = 236, 113
 play_button = pygame.transform.scale(play_button, (button_width, button_height))
@@ -55,6 +84,8 @@ right_arrow = pygame.transform.scale(right_arrow, (82, 58))
 colour_blind_button = pygame.transform.scale(colour_blind_button, (button_width * 0.75, button_height * 0.75))
 information_button = pygame.transform.scale(information_button, (button_width * 0.75, button_height * 0.75))
 conversion_arrow = pygame.transform.scale(conversion_arrow, (58, 82))
+bone = pygame.transform.scale(bone, (Cell_Size // 2, Cell_Size // 2))
+
 
 
 # Defining button dimensions and spacings
@@ -74,35 +105,6 @@ right_arrow_position = up_arrow.get_rect(topleft=(1050, 540))
 colour_blind_button_position = colour_blind_button.get_rect(topleft=(50, 335))
 information_button_position = information_button.get_rect(topleft=(940, 320))
 conversion_arrow_position = conversion_arrow.get_rect(topleft=(830, 500))
-
-# Initialising sliders for settings screen
-slider_x_volume = 250
-slider_x_brightness = 250
-slider_y_volume = 440
-slider_y_brightness = 560
-slider_width = 600
-slider_height = 10
-knob_radius = 20
-knob_x_volume = slider_x_volume + slider_width // 2  # Initial positions of the knobs
-knob_x_brightness = slider_x_brightness + slider_width // 2
-volume = 0.5  # Default values
-brightness = 1.0
-is_dragging_volume = False
-is_dragging_brightness = False
-
-# Defining colours
-white = (255, 255, 255)
-black = (1,1,1)
-red = (255,0,0)
-gray = (100,100,100)
-
-# Initialing maze components
-Rows, Cols = 12, 12
-player_row, player_col = 1, 1
-Bone_count = 0
-Cell_Size = Width//Cols
-
-game_state = "menu"
 
 def get_random_maze_position():
     while True:
@@ -171,7 +173,7 @@ def draw_maze():
     #Draw collectible bone
     collectible_x = 50 + x_offset + collectible_col * Cell_Size + player_offset
     collectible_y = maze_y_offset + collectible_row * Cell_Size + player_offset
-    pygame.draw.circle(screen, (0, 255, 0), (collectible_x + player_size // 2, collectible_y+ player_size // 2), player_size //3)
+    screen.blit(bone, (collectible_x - 20, collectible_y - 5))
 
     # Draw player
     player_x = 50 + x_offset + player_col * Cell_Size + player_offset
