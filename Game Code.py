@@ -222,7 +222,6 @@ collectible_row, collectible_col = get_random_maze_position()
 
 def draw_completion_screen():
     screen.blit(completion_screen, (0, 0))
-    screen.blit(home_button, home_button_position.topleft)
     screen.blit(information_button, information_button_position.topleft)
 
     global shine_scale, scale_direction
@@ -352,9 +351,7 @@ while running:
                 if back_button_position.collidepoint(mouse_pos):
                     game_state = 'menu'
             elif game_state == 'complete':
-                if home_button_position.collidepoint(mouse_pos):
-                    game_state = 'menu'
-                elif information_button_position.collidepoint(mouse_pos):
+                if information_button_position.collidepoint(mouse_pos):
                     overlay = pygame.Surface((button_width * 0.75, button_height * 0.75), pygame.SRCALPHA)
                     overlay.fill((0, 153, 0, 51))  # Green overlay
                     screen.blit(information_button, information_button_position.topleft)
