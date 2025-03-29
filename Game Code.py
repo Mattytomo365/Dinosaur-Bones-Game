@@ -37,6 +37,7 @@ player_row, player_col = 1, 1
 Bone_count = 0
 Cell_Size = Width//Cols
 
+#starts the game in the menu state
 game_state = "menu"
 
 # Screen background images
@@ -107,6 +108,7 @@ colour_blind_button_position = colour_blind_button.get_rect(topleft=(50, 335))
 information_button_position = information_button.get_rect(topleft=(940, 320))
 conversion_arrow_position = conversion_arrow.get_rect(topleft=(830, 500))
 
+#this method generates a random posion within the maze, to decide where to place a bone randomly.
 def get_random_maze_position():
     while True:
         row = random.randint(1, Rows - 2)
@@ -114,6 +116,7 @@ def get_random_maze_position():
         if maze[row][col] == 0:  # Ensure it's a valid path
             return row, col
 
+#declares the directions that the maze generation method can move in to carve through the grid.
 Directions = [(0, -2), (0, 2), (-2, 0), (2, 0)]
 
 maze = [[1 for _ in range(Cols)] for _ in range (Rows)]
@@ -168,7 +171,8 @@ def draw_maze():
         for col in range(Cols - 1):
             x, y = maze_x_offset + col * Cell_Size, maze_y_offset + row * Cell_Size
             if maze[row][col] == 1:
-                screen.blit(bush, (x, y))
+                screen.blit(bush, (x, y))#this checks if the cell is equal to 1, if so it draws a bush in that position
+                #meaning it is a wall that people cannot walk over, leaving the empty cells open
 
 
     #Draw collectible bone
@@ -201,7 +205,9 @@ def draw_maze():
 shine_scale = 1.3  # Initial scale (1.0 = original size)
 scale_direction = 0.0065  # Speed of scaling (adjust for faster/slower effect)
 
-
+#this method generates the maze using the depth first method meaning it starts at a specified position(1,1) and chooses random directions
+#to carve through the grid as deep as possible, until it reaches a dead end. once a dead end is reached it will back track to the last position where a different
+#direction could be chosen
 def Generate_The_Maze(x, y):
     maze[y][x] = 0
     random.shuffle(Directions)
@@ -216,7 +222,7 @@ def Generate_The_Maze(x, y):
 
 Generate_The_Maze(1, 1)
 
-collectible_row, collectible_col = get_random_maze_position()
+collectible_row, collectible_col = get_random_maze_position()#declares the random maze position as the collectible positon
 
 
 
@@ -261,7 +267,7 @@ def draw_information_screen():
 
     screen.blit(conversion_arrow, (conversion_arrow_position.x, conversion_arrow_position.y + arrow_y_offset))
 
-def Move_player(dx, dy):
+def Move_player(dx, dy):#changes the direction of players, ensuring the player doesn't pass through the walls.
     global player_row, player_col, collectible_col, collectible_row, Bone_count
     new_row = player_row + dy
     new_col = player_col + dx
@@ -278,7 +284,7 @@ running = True
 while running:
     # screen.fill(pathcolour)
     screen.fill((255, 255, 255)) # White background
-
+    #depending on the game state, shows the correct screen.
     if game_state == 'menu':
         draw_menu()
     elif game_state == 'game':
@@ -330,6 +336,7 @@ while running:
                     pygame.time.delay(150)
                     game_state = 'settings'
             elif game_state == 'game':
+                #cheks the mouse position to allow the player control buttons to move the player
                 if up_arrow_position.collidepoint(mouse_pos):
                     Move_player(0, -1)
                 elif down_arrow_position.collidepoint(mouse_pos):
