@@ -31,7 +31,7 @@ black = (1,1,1)
 red = (255,0,0)
 gray = (100,100,100)
 
-# Initialing maze components
+# Initialising maze components
 Rows, Cols = 12, 12
 player_row, player_col = 1, 1
 Bone_count = 0
