@@ -276,7 +276,6 @@ def Move_player(dx, dy):
 
 running = True
 while running:
-    # screen.fill(pathcolour)
     screen.fill((255, 255, 255)) # White background
 
     if game_state == 'menu':
