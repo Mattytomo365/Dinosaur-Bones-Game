@@ -52,22 +52,22 @@ Dinosaur_Bones<br/>
 ### Installation
 1. Clone the repository:
 
-```
-git clone https://github.com/Mattytomo365/Dinosaur-Bones-Game.git
-cd Dinosaur-Bones-Game
-```
+    ```
+    git clone https://github.com/Mattytomo365/Dinosaur-Bones-Game.git
+    cd Dinosaur-Bones-Game
+    ```
 
 2. Install dependencies
 
-```
-pip install pygame
-```
+    ```
+    pip install pygame
+    ```
 
 3. Run the game
 
-```
-python Game_Code.py
-```
+    ```
+    python Game_Code.py
+    ```
 
 ### Usage
 1. Access different screens using the buttons provided in the game interface
