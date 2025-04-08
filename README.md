@@ -4,7 +4,7 @@
 
 ## Overview
 
-An interactive educational maze game designed for museum engagement, where players collect dinosaur bones to assemble a skeleton and learn fun facts. Developed using Python with the PyGame library with a focus on accessibility, engagement, and randomized maze generation.
+An interactive educational maze game designed for museum engagement, where players collect dinosaur bones to assemble a skeleton and learn fun facts. Developed using Python with the PyGame library, focusing on accessibility, engagement, and randomized maze generation.
 
 ---
 
@@ -28,8 +28,8 @@ Dinosaur_Bones
     ├── bin/ # Virtual environment executables <br/>
     ├── include/ # Virtual environment includes <br/>
     ├── lib/ # Virtual environment libraries<br/>
-    │ ├── python3.9/ <br/>
-    │ │ ├── site-packages/ # Installed Python packages <br/>
+        ├── python3.9/ <br/>
+            ├── site-packages/ # Installed Python packages <br/>
     ├── pyvenv.cfg # Virtual environment configuration <br/>
     └── .idea/ # IDE configuration files<br/>
 
