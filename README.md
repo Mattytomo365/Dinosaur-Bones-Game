@@ -4,7 +4,9 @@
 
 ## Overview
 
-An interactive educational maze game designed for museum engagement, where players collect dinosaur bones to assemble a skeleton and learn fun facts. Developed using Python with the PyGame library, focusing on accessibility, engagement, and randomized maze generation.
+Dinosaur Bones Game is an interactive and educational maze-based game designed for museum exhibits. The game immerses players in a paleontology adventure, requiring them to navigate a randomised maze to collect scattered dinosaur bones. Once the bones are gathered, players assemble the skeleton and learn fascinating fscts about the dinosaur they have built.
+
+Developed using Python and the Pygame library, this game focuses on engagement, accessibility, and adaptability. Features like randomised maze generation ensure a dynamic and inclusive experience for players of all abilities.
 
 ---
 
@@ -18,38 +20,54 @@ An interactive educational maze game designed for museum engagement, where playe
 ---
 
 ## Technologies Used
+- [Python 3.9+](https://www.python.org) - Core programming language for game logic.
+- [Pygame 2.6.1](https://www.pygame.org/news) - Handles graphics, animations, and user interactions.
+- [Procreate](https://procreate.com) - Used to design custom game assets and UI elements.
+- [PyCharm](https://www.jetbrains.com/pycharm/) - IDE for development.
+- [Git](https://git-scm.com) - Version control.
+- [GitHub](https://github.com) - Collaboration.
 
 ---
 
 ## Project Structure
-Dinosaur_Bones
-    ├── Game Code.py # Main game logic<br/>
-    ├── README.md # Project documentation <br/>
-    ├── bin/ # Virtual environment executables <br/>
-    ├── include/ # Virtual environment includes <br/>
-    ├── lib/ # Virtual environment libraries<br/>
-        ├── python3.9/ <br/>
-            ├── site-packages/ # Installed Python packages <br/>
-    ├── pyvenv.cfg # Virtual environment configuration <br/>
-    └── .idea/ # IDE configuration files<br/>
+Dinosaur_Bones<br/>
+    ├── Game Code.py            # Main game logic<br/>
+    ├── README.md               # Project documentation <br/>
+    ├── bin/                    # Virtual environment executables <br/>
+    ├── include/                # Virtual environment includes <br/>
+    ├── lib/                    # Virtual environment libraries<br/>
+    ├── python3.9/  
+    │   ├── site-packages/      # Installed Python packages
+    ├── pyvenv.cfg              # Virtual environment configuration <br/>
+    └── .idea/                  # IDE configuration files<br/>
 
 ---
 
 ## Setup Instructions
 
 ### Prerequisites
-- Python 3.9 or higher
-- Pygame 2.6.1
+- Install Python 3.9 or higher
+- Install Pygame 2.6.1
 
 ### Installation
 1. Clone the repository:
 
 ```
 git clone https://github.com/Mattytomo365/Dinosaur-Bones-Game.git
+cd Dinosaur-Bones-Game
 ```
 
-2. Open the solution in an IDE of your choice
-3. Build and run the game
+2. Install dependencies
+
+```
+pip install pygame
+```
+
+3. Run the game
+
+```
+python Game_Code.py
+```
 
 ### Usage
 1. Access different screens using the buttons provided in the game interface
