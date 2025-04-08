@@ -20,12 +20,12 @@ Developed using Python and the Pygame library, this game focuses on engagement, 
 ---
 
 ## Technologies Used
-- [Python 3.9+](https://www.python.org) - Core programming language for game logic.
-- [Pygame 2.6.1](https://www.pygame.org/news) - Handles graphics, animations, and user interactions.
-- [Procreate](https://procreate.com) - Used to design custom game assets and UI elements.
-- [PyCharm](https://www.jetbrains.com/pycharm/) - IDE for development.
-- [Git](https://git-scm.com) - Version control.
-- [GitHub](https://github.com) - Collaboration.
+- [Python 3.9+](https://www.python.org): Core programming language for game logic.
+- [Pygame 2.6.1](https://www.pygame.org/news): Handles graphics, animations, and user interactions.
+- [Procreate](https://procreate.com): Used to design custom game assets and UI elements.
+- [PyCharm](https://www.jetbrains.com/pycharm/): IDE for development.
+- [Git](https://git-scm.com): Version control.
+- [GitHub](https://github.com): Collaboration.
 
 ---
 
