@@ -30,16 +30,16 @@ Developed using Python and the Pygame library, this game focuses on engagement, 
 ---
 
 ## Project Structure
-Dinosaur_Bones  
-├── Game Code.py            # Main game logic  
-├── README.md               # Project documentation  
-├── bin/                    # Virtual environment executables  
-├── include/                # Virtual environment includes  
-├── lib/                    # Virtual environment libraries  
-│   ├── python3.9/  
-│   │   ├── site-packages/  # Installed Python packages  
-├── pyvenv.cfg              # Virtual environment configuration  
-└── .idea/                  # IDE configuration files
+Dinosaur_Bones
+├── Game Code.py # Main game logic
+├── README.md # Project documentation
+├── bin/ # Virtual environment executables
+├── include/ # Virtual environment includes
+├── lib/ # Virtual environment libraries
+│ ├── python3.9/
+│ │ ├── site-packages/ # Installed Python packages
+├── pyvenv.cfg # Virtual environment configuration
+└── .idea/ # IDE configuration files
 
 ---
 
