@@ -48,6 +48,8 @@ Dinosaur_Bones
 ### Prerequisites
 - Install Python 3.9 or higher
 - Install Pygame 2.6.1
+- pip (Python package manager)
+- Git (for cloning the repository)
 
 ### Installation
 1. Clone the repository:
@@ -85,4 +87,4 @@ Please fork the repository and submit a pull request with your changes.
 ## Contact
 For any questions or feedback, feel free to reach out:
 - **Email:** matty.tom@icloud.com
-- **GitHub** [Mattytomo365](https://github.com/Mattytomo365)
+- **GitHub:** [Mattytomo365](https://github.com/Mattytomo365)
