@@ -65,7 +65,6 @@ Dinosaur_Bones
     cd Dinosaur_Bones
     ```
 
-
 3. Install dependencies
 
     ```
