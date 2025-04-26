@@ -57,16 +57,22 @@ Dinosaur_Bones
 
     ```
     git clone https://github.com/Mattytomo365/Dinosaur-Bones-Game.git
-    cd Dinosaur-Bones-Game
     ```
 
-2. Install dependencies
+2. Navigate to the project directory:
+
+    ```
+    cd Dinosaur_Bones
+    ```
+
+
+3. Install dependencies
 
     ```
     pip install pygame
     ```
 
-3. Run the game
+4. Run the game
 
     ```
     python Game_Code.py
